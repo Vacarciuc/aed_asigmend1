@@ -34,3 +34,12 @@ def get_info(
     plt.xlabel('Timp')
     plt.ylabel(column_name)
     plt.show()
+
+
+def get_heat_map(data: DataFrame):
+    corr_matrix = data.drop(columns=["Time", "Indicator"], errors="ignore").corr()
+    print(corr_matrix)
+    plt.figure(figsize=(10, 6))
+    sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", center=0)
+    plt.title("Correlation Matrix")
+    plt.show()

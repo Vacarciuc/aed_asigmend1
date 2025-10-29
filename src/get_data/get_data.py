@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from pandas import DataFrame
-import sklearn
+from sklearn.preprocessing import StandardScaler
 
 
 def read_file(
@@ -39,6 +39,15 @@ def read_file(
 
 def get_zero_code(data: DataFrame):
     scaler = StandardScaler()
-    scaled = scaler.fit_transform(data.T)  # dacă datele sunt în coloane
-    df_scaled = pd.DataFrame(scaled.T, index=data.index, columns=data.columns)
-    print(df_scaled)
+
+    # Elimină coloanele nenumerice (Indicator, Time)
+    numeric_data = data.drop(columns=["Time"], errors="ignore")
+    # Aplică scalarea doar pe valori numerice
+    scaled = scaler.fit_transform(numeric_data)
+    # Reconstruiește DataFrame-ul scalat
+    scaled_df = pd.DataFrame(
+        scaled,
+        columns=numeric_data.columns
+    )
+    scaled_df["Time"] = data["Time"].values
+    return scaled_df
