@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from pandas import DataFrame
 from sklearn.preprocessing import StandardScaler
+from statsmodels.tsa.filters.hp_filter import hpfilter
 
 
 def read_file(
@@ -39,7 +40,6 @@ def read_file(
 
 def get_zero_code(data: DataFrame):
     scaler = StandardScaler()
-
     # Elimină coloanele nenumerice (Indicator, Time)
     numeric_data = data.drop(columns=["Time"], errors="ignore")
     # Aplică scalarea doar pe valori numerice
@@ -51,3 +51,21 @@ def get_zero_code(data: DataFrame):
     )
     scaled_df["Time"] = data["Time"].values
     return scaled_df
+
+def filer_data_hp_bidirectional(df: DataFrame, lamb = 1600) -> DataFrame:
+    numeric_data = df.drop(columns=["Time"], errors="ignore")
+    results = {}
+    # aplicăm HPFilter pentru fiecare coloană numerică
+    for col in numeric_data.columns:
+        cycle, trend = hpfilter(numeric_data[col], lamb=lamb)
+        results[f"{col}"] = trend
+        results[f"{col}"] = cycle
+
+    # combinăm rezultatele într-un nou DataFrame
+    result_df = pd.DataFrame(results, index=df.index)
+
+    # adăugăm înapoi "Time",
+    if "Time" in df.columns:
+        result_df.insert(0, "Time", df["Time"])
+
+    return result_df

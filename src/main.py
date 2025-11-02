@@ -8,6 +8,7 @@ from get_data.draw_graph import plot_density_plot
 from get_data.draw_graph import scatter_plots_multi
 from get_data.get_data import get_zero_code
 from get_data.get_info import get_heat_map
+from get_data.get_data import filer_data_hp_bidirectional
 from Dataset import Dataset
 
 
@@ -22,9 +23,11 @@ def main(dataset: Dataset):
         return
 
     data = read_file(path, started=2000, finished=2024)
+    #hp-filter datele mele devin ma dispersate...
+    #data = filer_data_hp_bidirectional(data)
     univariate_analysis(
         data=data,
-        column_name='namq_10_gdp',
+        column_name='earn_nt_net',
     )
     z_score_data = get_zero_code(data)
     bivariate_analysis(z_score_data)
@@ -56,7 +59,7 @@ if __name__ == '__main__':
 #relatie puternica pozitiva
 # [('lfsi_emp_q', 'tipsna40', 'namq_10_exi', 'namq_10_gdp'),
 #relatie puternica negativa
-#[('lfsi_emp_q', 'une_rt_q')]
+#[('lfsi_emp_q', 'une_rt_q')]fil
 
 #dataset_2
 #relatie puternica pozitiva
