@@ -17,15 +17,17 @@ Proiectul permite:
 
 ## 🧩 Librării folosite
 
-| Librărie | Descriere |
-|-----------|------------|
-| `pandas` | Manipulare și analiză de date (citirea fișierelor Excel, lucrul cu DataFrame-uri). |
-| `numpy` | Operații numerice și statistice eficiente. |
-| `matplotlib.pyplot` | Crearea graficelor simple (histograme, scatter, boxplot etc.). |
-| `seaborn` | Bibliotecă de vizualizare statistică bazată pe Matplotlib, cu design modern. |
-| `sklearn.preprocessing.StandardScaler` | Normalizează datele (medie = 0, deviație standard = 1). |
-| `os` | Gestionarea fișierelor și directoarelor locale. |
-| `enum.Enum` | Definirea enumerărilor (în cazul nostru, selectarea dataset-ului). |
+| Librărie                              | Descriere                                                                                                                    |
+|---------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| `pandas`                              | Manipulare și analiză de date (citirea fișierelor Excel, lucrul cu DataFrame-uri).                                           |
+| `numpy`                               | Operații numerice și statistice eficiente.                                                                                   |
+| `matplotlib.pyplot`                   | Crearea graficelor simple (histograme, scatter, boxplot etc.).                                                               |
+| `seaborn`                             | Bibliotecă de vizualizare statistică bazată pe Matplotlib, cu design modern.                                                 |
+| `sklearn.preprocessing.StandardScaler`| Normalizează datele (medie = 0, deviație standard = 1).                                                                      |
+| `statsmodels.tsa.filters.hp_filter`   | Aplicăm filtrul Hodrick–Prescott (HPFilter) pentru separarea tendinței și componentei ciclice din serii temporale economice. |                                                         |
+| `os`                                  | Gestionarea fișierelor și directoarelor locale.                                                                              |
+| `enum.Enum`                           | Definirea enumerărilor (în cazul nostru, selectarea dataset-ului).                                                           |
+
 
 ---
 
@@ -81,6 +83,11 @@ Afișează informații statistice despre o coloană (min, max, medie, mediană e
 
 ### 🔹 `get_heat_map(data)`
 Generează o **hartă de corelație (heatmap)** cu coeficienții Pearson între toate variabilele numerice.
+
+
+### 🔹 `filer_data_hp_bidirectional(data, lamb)`
+Filtrează toate coloanele in dateframe, si recreaza dataframe din nou deja cu datele filtrate, separând
+seriișe temporale în componente de trend și componente ciclice.
 
 ---
 
