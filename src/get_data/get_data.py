@@ -23,6 +23,8 @@ def read_file(
     #############
     # Asigurăm că Time e datetime
     df['Time'] = pd.to_datetime(df['Time'], errors='coerce')
+
+    df['crisis'] = df['Time'].dt.year.isin([2008, 2009, 2020]).astype(int)
     # aplicăm filtrarea după ani dacă se specifică
     if started and finished:
         mask = (df['Time'].dt.year >= started) & (df['Time'].dt.year <= finished)
@@ -69,3 +71,18 @@ def filer_data_hp_bidirectional(df: DataFrame, lamb = 1600) -> DataFrame:
         result_df.insert(0, "Time", df["Time"])
 
     return result_df
+
+
+def add_growth_rate(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
+    if column_name not in df.columns:
+        raise ValueError(f"Coloana '{column_name}' nu există în DataFrame!")
+
+        # asigurăm ordonarea corectă după timp
+    if 'Time' in df.columns:
+        df = df.sort_values(by='Time')
+
+    growth_col = f"{column_name}_growth"
+    df[growth_col] = df[column_name].pct_change() * 100
+
+    print(f"✅ Adăugată coloana '{growth_col}' (rata de creștere anuală %)")
+    return df

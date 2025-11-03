@@ -51,27 +51,40 @@ def plot_density_plot(
     plt.show()
 
 
-def scatter_plots_multi(data: pd.DataFrame):
+def scatter_plots_multi(data: pd.DataFrame, cols: list[str] = None):
     # Verificăm coloana Time
     if 'Time' not in data.columns:
-        print('Time not found in data!')
+        print('Coloana "Time" nu a fost găsită în DataFrame!')
         return
 
     # Convertim Time în datetime
-    data['Time'] = pd.to_datetime(data['Time'])
+    try:
+        data['Time'] = pd.to_datetime(data['Time'])
+    except Exception:
+        print('Eroare la conversia coloanei Time în datetime.')
+        return
 
     x_axis = data['Time']
     colors = ['green', 'red', 'blue', 'yellow', 'orange', 'gray', 'purple', 'maroon', 'violet', 'coral']
 
     plt.figure(figsize=(10, 6))
 
-    # Excludem coloanele nenumerice și Time
-    for i, col in enumerate([c for c in data.columns if c not in ['Indicator', 'Time']]):
+    # Selectăm doar coloanele dorite
+    if cols:
+        columns_to_plot = [col for col in cols if col in data.columns]
+        if not columns_to_plot:
+            print("Niciuna dintre coloanele specificate nu există în DataFrame.")
+            return
+    else:
+        columns_to_plot = [c for c in data.columns if c not in ['Indicator', 'Time']]
+
+    # Desenăm punctele
+    for i, col in enumerate(columns_to_plot):
         plt.scatter(x_axis, data[col], label=col, color=colors[i % len(colors)], alpha=0.7)
 
     plt.title('Multi Scatter Plot (Date pe axa timpului)')
     plt.xlabel('Time')
-    plt.ylabel('Scaled Values')
+    plt.ylabel('Values')
     plt.legend()
     plt.grid(True)
     plt.show()
